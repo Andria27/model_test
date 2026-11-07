@@ -1,4 +1,3 @@
-
 How well Gemma and Phi models turn smart home network events into plain-language narration for the exhibit.
 
 Hardware: Acer Nitro V 15 RTX 5060. Each event is run 5 times per model.
@@ -24,40 +23,43 @@ Speeds depend on the laptop's power and heat state, so compare them within this 
 
 ## Hardware and software requirements
 
-| Model | Download size | Memory needed (approx.) | Runs on Raspberry Pi 5 (8 GB) | Runs on test laptop GPU (8 GB) |
-|---|---|---|---|---|
-| Gemma 4 E2B | 4.6 GB | ~5 GB | Likely | Yes, fully on GPU |
-| Gemma 4 E4B | 6.6 GB | ~7 GB | Tight; a 16 GB Pi is safer | Yes, fully on GPU |
-| Phi-4 Mini | 2.5 GB | ~3–4 GB | Yes | Yes, fully on GPU |
-| Phi-4 | 9.1 GB | ~10 GB | No | Partly; overflows into system RAM, which caused failed runs |
+| Model | Download size | Memory needed (approx.) | Fits on an 8 GB GPU |
+|---|---|---|---|
+| Gemma 4 E2B | 4.6 GB | ~5 GB | Yes |
+| Gemma 4 E4B | 6.6 GB | ~7 GB | Yes |
+| Phi-4 Mini | 2.5 GB | ~3–4 GB | Yes |
+| Phi-4 | 9.1 GB | ~10 GB | No; overflows into system RAM, which caused failed runs |
 
-**Software:** Ollama (free; Windows, macOS, Linux and 64-bit Raspberry Pi OS), Python 3 for running the tests (standard library only). Models are downloaded once with `ollama pull` and run offline.
+**Hardware:** a laptop or desktop with a dedicated GPU with at least 8 GB of memory (tested on an RTX 5060) and 16 GB of system RAM. Without a dedicated GPU, models run on the processor and are much slower.
+
+**Software:** Ollama (free; Windows, macOS and Linux), Python 3 for running the tests (standard library only). Models are downloaded once with `ollama pull` and run offline.
 
 ## Cost
 
-All four models run locally, so there is **no API cost**: no per-request fees, no account and no internet needed on demo day. The only costs are hardware you already own (Raspberry Pi or laptop) and electricity. An accelerator for the Pi to increase processing speed (Raspberry Pi AI HAT+ 2, about $200 USD) is not needed based on these results.
+All four models run locally, so there is **no API cost**: no per-request fees, no account and no internet needed on demo day. The only costs are hardware you already own and electricity.
 
 ## Expected response latency
 
-| Model | Test laptop (measured) | Raspberry Pi 5 (estimated) |
-|---|---|---|
-| Gemma 4 E2B | 0.3–0.8 s | ~8–12 s |
-| Gemma 4 E4B | 0.4–1.0 s | ~15–25 s |
-| Phi-4 Mini | 0.7–1.0 s | ~10–15 s |
-| Phi-4 | 6–10 s | Not possible |
+| Model | Measured on test laptop (RTX 5060) |
+|---|---|
+| Gemma 4 E2B | 0.3–0.8 s |
+| Gemma 4 E4B | 0.4–1.0 s |
+| Phi-4 Mini | 0.7–1.0 s |
+| Phi-4 | 6–10 s |
 
-Pi estimates are based on published Pi 5 benchmarks (about 7–8 tokens, or word pieces, per second for Gemma 4 E2B) and a two-sentence answer of about 50 tokens, plus time to read the prompt. **These have not been measured yet** and should be confirmed on the Pi. At these speeds, live narration on the Pi would have a noticeable delay; pre-generating narration for common events (Version B) would avoid it.
+On a computer with a similar GPU, Gemma 4 E2B, Gemma 4 E4B and Phi-4 Mini are fast enough for live narration. On a computer without a dedicated GPU, expect several seconds per answer; this has not been measured.
 
 ## Recommendation
 
-Gemma 4 E2B (run locally through Ollama):
+Gemma 4 E4B (run locally through Ollama):
 
 - Met every requirement in testing: all key facts included, exactly two sentences, no numbers or technical terms, and "unknown" stated instead of guessed.
-- Is the fastest model tested and the only accurate one small enough to run well on the Raspberry Pi.
+- Had the clearest wording of the models tested.
+- Answers in under a second on a laptop GPU, fast enough for live narration.
 - Runs offline at no cost.
 
-**If the exhibit uses a laptop to run the model,** Gemma 4 E4B is a good alternative: equally accurate with smoother wording, but slower and more repetitive.
+**If the exhibit computer has no dedicated GPU,** Gemma 4 E2B is a good alternative: nearly as accurate and faster, but with more awkward wording.
 
-**Not recommended:** Phi-4 Mini (adds numbers and addresses, invents details, never said missing information was unknown) and Phi-4 (too slow and too large for the available hardware).
+**Not recommended:** Phi-4 Mini (adds numbers and addresses, invents details, never said missing information was unknown) and Phi-4 (too slow and too large for an 8 GB GPU).
 
-**Next steps:** measure Gemma 4 E2B and E4B speed on the Pi (if using), test on real PingPong events, and finalize the prompt once you've decided which facts the exhibit shows and how long narration can be.
+**Next steps:** test Llama models for comparison, confirm which computer will run the exhibit, test on real PingPong events, and finalize the prompt once you've decided which facts the exhibit shows and how long narration can be.
