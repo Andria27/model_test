@@ -1,4 +1,4 @@
-How well Gemma and Phi models turn smart home network events into plain-language narration for the exhibit.
+How well Gemma, Phi and Llama models turn smart home network events into plain-language narration for the exhibit.
 
 Hardware: Acer Nitro V 15 RTX 5060. Each event is run 5 times per model.
 
@@ -12,12 +12,14 @@ Hardware: Acer Nitro V 15 RTX 5060. Each event is run 5 times per model.
 
 The prompt asks for exactly two sentences, includes two examples, and says to call missing facts "unknown". There is one event where the server's company and country are unknown.
 
-| Model       | Time   | Key facts (country, company, cause, encryption)   | Exactly 2 sentences | Numbers or technical words | Event 7 (unknown info) | Notes                                                                          |
-| ----------- | ------ | ------------------------------------------------- | ------------------- | -------------------------- | ---------------------- | ------------------------------------------------------------------------------ |
-| Gemma 4 E2B | 0.76 s | All included (left out who started it twice)      | 35/35               | 0/35                       | 5/5 said unknown       | Awkward phrasing ("data went to an unknown country run by an unknown company") |
-| Gemma 4 E4B | 0.97 s | All included                                      | 35/35               | 0/35                       | 5/5 said unknown       | Cleanest; repetitive (18 different answers out of 35)                          |
-| Phi-4 Mini  | 0.97 s | Skipped "on its own" or the company several times | 32/35               | 6/35                       | 0/5 said unknown       | Gave the IP address 3 times instead of saying the server was unknown           |
-| Phi-4       | 9.50 s | All included                                      | 34/35               | 2/35                       | 4/5 said unknown       | Gave the IP address twice; very slow                                           |
+| Model | Time | Key facts (country, company, cause, encryption) | Exactly 2 sentences | Numbers or technical words | Event 7 (unknown info) | Notes |
+|---|---|---|---|---|---|---|
+| Gemma 4 E2B | 0.66 s | All included (left out who started it twice) | 35/35 | 0/35 | 5/5 said unknown | Awkward phrasing ("data went to an unknown country run by an unknown company") |
+| Gemma 4 E4B | 0.45 s | All included | 35/35 | 0/35 | 5/5 said unknown | Cleanest; repetitive (18 different answers out of 35) |
+| Phi-4 Mini | 0.57 s | Skipped "on its own" or the company several times | 32/35 | 6/35 | 0/5 said unknown | Gave the IP address 3 times instead of saying the server was unknown |
+| Phi-4 | 4.84 s | All included | 34/35 | 2/35 | 4/5 said unknown | Very slow |
+| Llama 3.2 3B | 0.45 s | Left out who started it in 16 of 35 answers | 34/35 | 4/35 | 2/5 said unknown | Often skipped "on its own"; mentioned packets and a web address |
+| Llama 3.1 8B | 0.87 s | Left out who started it in 6 of 35 answers | 35/35 | 3/35 | 1/5 said unknown | Usually skipped the unknown country or company; mentioned bytes once |
 
 Speeds depend on the laptop's power and heat state, so compare them within this table only.
 
@@ -29,6 +31,8 @@ Speeds depend on the laptop's power and heat state, so compare them within this 
 | Gemma 4 E4B | 6.6 GB | ~7 GB | Yes |
 | Phi-4 Mini | 2.5 GB | ~3–4 GB | Yes |
 | Phi-4 | 9.1 GB | ~10 GB | No; overflows into system RAM, which caused failed runs |
+| Llama 3.2 3B | 2.0 GB | ~3 GB | Yes |
+| Llama 3.1 8B | 4.9 GB | ~6 GB | Yes |
 
 **Hardware:** a laptop or desktop with a dedicated GPU with at least 8 GB of memory (tested on an RTX 5060) and 16 GB of system RAM. Without a dedicated GPU, models run on the processor and are much slower.
 
@@ -36,7 +40,7 @@ Speeds depend on the laptop's power and heat state, so compare them within this 
 
 ## Cost
 
-All four models run locally, so there is **no API cost**: no per-request fees, no account and no internet needed on demo day. The only costs are hardware you already own and electricity.
+All six models run locally, so there is **no API cost**: no per-request fees, no account and no internet connection needed. The only costs are hardware we already own and electricity.
 
 ## Expected response latency
 
@@ -44,10 +48,12 @@ All four models run locally, so there is **no API cost**: no per-request fees, n
 |---|---|
 | Gemma 4 E2B | 0.3–0.8 s |
 | Gemma 4 E4B | 0.4–1.0 s |
-| Phi-4 Mini | 0.7–1.0 s |
-| Phi-4 | 6–10 s |
+| Phi-4 Mini | 0.6–1.0 s |
+| Phi-4 | 5–10 s |
+| Llama 3.2 3B | about 0.5 s |
+| Llama 3.1 8B | about 0.9 s |
 
-On a computer with a similar GPU, Gemma 4 E2B, Gemma 4 E4B and Phi-4 Mini are fast enough for live narration. On a computer without a dedicated GPU, expect several seconds per answer; this has not been measured.
+On a computer with a similar GPU, every model except Phi-4 is fast enough for live narration. On a computer without a dedicated GPU, expect several seconds per answer; this has not been measured.
 
 ## Recommendation
 
@@ -60,6 +66,9 @@ Gemma 4 E4B (run locally through Ollama):
 
 **If the exhibit computer has no dedicated GPU,** Gemma 4 E2B is a good alternative: nearly as accurate and faster, but with more awkward wording.
 
-**Not recommended:** Phi-4 Mini (adds numbers and addresses, invents details, never said missing information was unknown) and Phi-4 (too slow and too large for an 8 GB GPU).
+**Not recommended:**
+- Llama 3.1 8B and Llama 3.2 3B: often left out who started the event and rarely said missing information was unknown.
+- Phi-4 Mini: adds numbers and addresses, invents details, never said missing information was unknown.
+- Phi-4: too slow and too large for an 8 GB GPU.
 
-**Next steps:** test Llama models for comparison, confirm which computer will run the exhibit, test on real PingPong events, and finalize the prompt once you've decided which facts the exhibit shows and how long narration can be.
+**Next steps:** confirm which computer will run the exhibit, test on real PingPong events, and finalize the prompt once we've decided which facts the exhibit shows and how long narration can be.

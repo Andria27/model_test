@@ -33,15 +33,16 @@ OLLAMA = "http://localhost:11434"
 # Models to test. Check exact tags with:  ollama list
 MODELS = [
     "gemma4:e2b",
-    "phi4-mini",
     "gemma4:e4b",
+    "phi4-mini",
     "phi4",
+    "llama3.2:3b",
+    "llama3.1:8b",
 ]
 
 # Change this label whenever you change any prompt part below or events.json,
 # so each results file says which version produced it.
-PROMPT_VERSION = "v2"
-
+PROMPT_VERSION = "v1"
 # ---------------------------------------------------------------------------
 # Prompt, in two parts. Sent as the system prompt, separate from the event.
 # Keep this the same for testing.
