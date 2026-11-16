@@ -6,22 +6,28 @@ Hardware: Acer Nitro V 15 RTX 5060. Each event is run 5 times per model.
 1. Wrote 7 sample network events as JSON, each describing one thing a smart device did (e.g. a plug turning on, a bulb checking for an update etc.).
 2. Wrote a prompt asking the model to describe each event in short, plain sentences for museum visitors.
 3. Ran each model locally through Ollama. The script loads each model with an untimed warm-up, then sends every event 5 times with the same temperature (0.7) and seed for every model, and saves each answer, its timing and automatic checks to a CSV file.
-4. Viewed the results, and counted how often each model included key facts, used technical words, or added details that weren't in the event.
+4. Read every answer and rated it against the event's known facts: accurate (all facts correct), partly (a fact missing, numbers or addresses included, or unclear wording) or inaccurate (something false). The rating and a note for every answer are in `results_v1_2026-11-07_1516_rated.csv`.
 
 ## Results
 
 The prompt asks for exactly two sentences, includes two examples, and says to call missing facts "unknown". There is one event where the server's company and country are unknown.
 
-| Model | Time | Key facts (country, company, cause, encryption) | Exactly 2 sentences | Numbers or technical words | Event 7 (unknown info) | Notes |
-|---|---|---|---|---|---|---|
-| Gemma 4 E2B | 0.66 s | All included (left out who started it twice) | 35/35 | 0/35 | 5/5 said unknown | Awkward phrasing ("data went to an unknown country run by an unknown company") |
-| Gemma 4 E4B | 0.45 s | All included | 35/35 | 0/35 | 5/5 said unknown | Cleanest; repetitive (18 different answers out of 35) |
-| Phi-4 Mini | 0.57 s | Skipped "on its own" or the company several times | 32/35 | 8/35 | 0/5 said unknown | Gave the IP address 3 times instead of saying the server was unknown; listed packet counts and bytes |
-| Phi-4 | 4.84 s | All included | 34/35 | 2/35 | 4/5 said unknown | Very slow; gave the IP address twice |
-| Llama 3.2 3B | 0.45 s | Left out who started it in 16 of 35 answers | 34/35 | 5/35 | 2/5 said unknown | Often skipped "on its own"; mentioned packets and a web address |
-| Llama 3.1 8B | 0.87 s | Left out who started it in 6 of 35 answers | 35/35 | 4/35 | 1/5 said unknown | Usually skipped the unknown country or company; mentioned packets, bytes and a web address |
+| Model | Time | Accurate answers | Key facts (country, company, cause, encryption) | Exactly 2 sentences | Numbers or technical words | Event 7 (unknown info) | Notes |
+|---|---|---|---|---|---|---|---|
+| Gemma 4 E2B | 0.66 s | 29/35 (83%) | All included (left out who started it twice) | 35/35 | 0/35 | 5/5 said unknown | Awkward phrasing ("data went to an unknown country run by an unknown company") |
+| Gemma 4 E4B | 0.45 s | 34/35 (97%) | All included | 35/35 | 0/35 | 5/5 said unknown | Cleanest; repetitive (18 different answers out of 35) |
+| Phi-4 Mini | 0.57 s | 21/35 (60%), 1 false | Skipped "on its own" or the company several times | 32/35 | 8/35 | 0/5 said unknown | Gave the IP address 3 times instead of saying the server was unknown; listed packet counts and bytes |
+| Phi-4 | 4.84 s | 30/35 (86%) | All included | 34/35 | 2/35 | 4/5 said unknown | Very slow; gave the IP address twice |
+| Llama 3.2 3B | 0.45 s | 11/35 (31%), 2 false | Left out who started it in 16 of 35 answers | 34/35 | 5/35 | 2/5 said unknown | Often skipped "on its own"; mentioned packets and a web address |
+| Llama 3.1 8B | 0.87 s | 23/35 (66%) | Left out who started it in 6 of 35 answers | 35/35 | 4/35 | 1/5 said unknown | Usually skipped the unknown country or company; mentioned packets, bytes and a web address |
 
 Speeds depend on the laptop's power and heat state, so compare them within this table only.
+
+## Is live narration viable?
+
+Criteria: at least 95% of answers accurate, no false answers, and a median response under 2 seconds.
+
+**Yes, with Gemma 4 E4B** on a laptop with a GPU: 34 of 35 answers were accurate, none were false, and the median response was under half a second. It is the only model that meets all three criteria. This should be confirmed with real events and on the exhibit computer.
 
 ## Hardware and software requirements
 
