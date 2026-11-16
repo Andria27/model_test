@@ -64,7 +64,7 @@ Gemma 4 E4B (run locally through Ollama):
 - Answers in under a second on a laptop GPU, fast enough for live narration.
 - Runs offline at no cost.
 
-**If the exhibit computer has no dedicated GPU,** Gemma 4 E2B is a good alternative: nearly as accurate and faster, but with more awkward wording.
+**If the exhibit computer has no dedicated GPU,** Gemma 4 E2B is a good alternative: nearly as accurate with similar speed, but with more awkward wording.
 
 **Not recommended:**
 - Llama 3.1 8B and Llama 3.2 3B: often left out who started the event and rarely said missing information was unknown.
