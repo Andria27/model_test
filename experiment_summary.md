@@ -16,10 +16,10 @@ The prompt asks for exactly two sentences, includes two examples, and says to ca
 |---|---|---|---|---|---|---|
 | Gemma 4 E2B | 0.66 s | All included (left out who started it twice) | 35/35 | 0/35 | 5/5 said unknown | Awkward phrasing ("data went to an unknown country run by an unknown company") |
 | Gemma 4 E4B | 0.45 s | All included | 35/35 | 0/35 | 5/5 said unknown | Cleanest; repetitive (18 different answers out of 35) |
-| Phi-4 Mini | 0.57 s | Skipped "on its own" or the company several times | 32/35 | 6/35 | 0/5 said unknown | Gave the IP address 3 times instead of saying the server was unknown |
-| Phi-4 | 4.84 s | All included | 34/35 | 2/35 | 4/5 said unknown | Very slow |
-| Llama 3.2 3B | 0.45 s | Left out who started it in 16 of 35 answers | 34/35 | 4/35 | 2/5 said unknown | Often skipped "on its own"; mentioned packets and a web address |
-| Llama 3.1 8B | 0.87 s | Left out who started it in 6 of 35 answers | 35/35 | 3/35 | 1/5 said unknown | Usually skipped the unknown country or company; mentioned bytes once |
+| Phi-4 Mini | 0.57 s | Skipped "on its own" or the company several times | 32/35 | 8/35 | 0/5 said unknown | Gave the IP address 3 times instead of saying the server was unknown; listed packet counts and bytes |
+| Phi-4 | 4.84 s | All included | 34/35 | 2/35 | 4/5 said unknown | Very slow; gave the IP address twice |
+| Llama 3.2 3B | 0.45 s | Left out who started it in 16 of 35 answers | 34/35 | 5/35 | 2/5 said unknown | Often skipped "on its own"; mentioned packets and a web address |
+| Llama 3.1 8B | 0.87 s | Left out who started it in 6 of 35 answers | 35/35 | 4/35 | 1/5 said unknown | Usually skipped the unknown country or company; mentioned packets, bytes and a web address |
 
 Speeds depend on the laptop's power and heat state, so compare them within this table only.
 
@@ -46,12 +46,12 @@ All six models run locally, so there is **no API cost**: no per-request fees, no
 
 | Model | Measured on test laptop (RTX 5060) |
 |---|---|
-| Gemma 4 E2B | 0.3–0.8 s |
-| Gemma 4 E4B | 0.4–1.0 s |
-| Phi-4 Mini | 0.6–1.0 s |
-| Phi-4 | 5–10 s |
-| Llama 3.2 3B | about 0.5 s |
-| Llama 3.1 8B | about 0.9 s |
+| Gemma 4 E2B | 0.5–1.5 s (median 0.66 s) |
+| Gemma 4 E4B | 0.4–1.4 s (median 0.45 s) |
+| Phi-4 Mini | 0.4–0.8 s (median 0.57 s) |
+| Phi-4 | 3.5–6.8 s (median 4.84 s) |
+| Llama 3.2 3B | 0.4–0.7 s (median 0.45 s) |
+| Llama 3.1 8B | 0.7–1.2 s (median 0.87 s) |
 
 On a computer with a similar GPU, every model except Phi-4 is fast enough for live narration. On a computer without a dedicated GPU, expect several seconds per answer; this has not been measured.
 
